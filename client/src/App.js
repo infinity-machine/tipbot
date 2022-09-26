@@ -3,11 +3,11 @@ import { useState } from 'react';
 
 function App() {
   const [promptIndex, setPromptIndex] = useState(0);
-  const [promptArray] = useState([
+  const promptArray = [
     'HOW MUCH MONEY WE TALKIN?',
     'HOW MANY EXPOS?',
     'ENTER HOURS WORKED FOR EACH EXPO',
-  ]);
+  ];
 
   const [formValue, setFormValue] = useState('');
   const [multipleFormValue, setMultipleFormValue] = useState({})
@@ -24,7 +24,7 @@ function App() {
     e.preventDefault();
     setFormValue('');
     setPromptIndex(promptIndex + 1);
-    handleSetValue(formValue);
+    // handleSetValue(formValue);
   }
 
   const handleBack = (e) => {
@@ -33,25 +33,25 @@ function App() {
     setPromptIndex(promptIndex - 1)
   }
 
-  const handleSetValue = (value) => {
-    switch (promptIndex) {
-      case 0:
-        setTotalAmount(value);
-        break;
-      case 1:
-        for (let i = 0; i < value; i++) {
-          empHours.push(0);
-        };
-        setMultipleInput(true);
-        break;
-      case 2:
-        setEmpHours(...value);
-        break;
-      case 3:
-        console.log(empHours);
-        break;
-    }
-  }
+  // const handleSetValue = (value) => {
+  //   switch (promptIndex) {
+  //     case 0:
+  //       setTotalAmount(value);
+  //       break;
+  //     case 1:
+  //       for (let i = 0; i < value; i++) {
+  //         empHours.push(0);
+  //       };
+  //       setMultipleInput(true);
+  //       break;
+  //     case 2:
+  //       setEmpHours(...value);
+  //       break;
+  //     case 3:
+  //       console.log(empHours);
+  //       break;
+  //   }
+  // }
 
   return (
     <div>
