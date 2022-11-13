@@ -10,62 +10,35 @@ function App() {
   ];
 
   const [formValue, setFormValue] = useState('');
-  const [multipleFormValue, setMultipleFormValue] = useState({})
-  const [totalAmount, setTotalAmount] = useState(0);
-  const [empAmount, setEmpAmount] = useState(0);
-  const [empHours, setEmpHours] = useState([]);
-  const [multipleInput, setMultipleInput] = useState(false)
 
   const handleInputChange = (e) => {
     setFormValue(e.target.value)
   }
 
-  const handleNext = (e) => {
-    e.preventDefault();
+  const handleNext = () => {
     setFormValue('');
     setPromptIndex(promptIndex + 1);
-    // handleSetValue(formValue);
+
   }
 
-  const handleBack = (e) => {
-    e.preventDefault();
+  const handleBack = () => {
     setFormValue('');
     setPromptIndex(promptIndex - 1)
   }
 
-  // const handleSetValue = (value) => {
-  //   switch (promptIndex) {
-  //     case 0:
-  //       setTotalAmount(value);
-  //       break;
-  //     case 1:
-  //       for (let i = 0; i < value; i++) {
-  //         empHours.push(0);
-  //       };
-  //       setMultipleInput(true);
-  //       break;
-  //     case 2:
-  //       setEmpHours(...value);
-  //       break;
-  //     case 3:
-  //       console.log(empHours);
-  //       break;
-  //   }
-  // }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('hi')
+    handleNext()
+  }
 
   return (
     <div>
       <p>{promptArray[promptIndex]}</p>
-      <form>
-        <button onClick={handleBack}>BACK</button>
-        {
-          multipleInput ?
-            empHours.map((input, index) => {
-              return <input key={index} placeholder={`EMPLOYEE ${index + 1} HOURS`}></input>
-            }) :
-            <input onChange={handleInputChange} value={formValue} placeholder="AMOUNT"></input>
-        }
-        <button onClick={handleNext}>NEXT</button>
+      <button onClick={handleBack}>BACK</button>
+      <form onSubmit={handleSubmit}>
+        <input onChange={handleInputChange} value={formValue}></input>
+        <button onClick={handleSubmit}>NEXT</button>
       </form>
     </div>
   );
