@@ -1,16 +1,4 @@
-// const array = ['yes', 'no', 'maybe']
-// const x = 3
 
-// console.log(x.length)
-
-// array.map((item, index) => {
-//     console.log(`${item} is number ${index} of the list!`)
-// })
-
-
-
-const array = [3, 2, 7];
-const total = 234
 
 function returnSum(array){
     let sum = 0;
@@ -37,7 +25,15 @@ function splitTips(total_cash, hours_array){
 };
 
 
-console.log('expo' + 1)
+const myObject = { 
+    name: 'John', 
+    age: 25, 
+    location: 'New York' 
+}; 
+  
+const renderProperties = Object.keys(myObject).map((key) => { 
+    return <p>{key}: {myObject[key]}</p>; 
+});
 
-splitTips(total, array)
-// console.log(returnSum(array))
+
+renderProperties(myObj)

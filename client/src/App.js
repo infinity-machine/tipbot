@@ -1,14 +1,16 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useState } from 'react';
 
 function App() {
-  const [promptIndex, setPromptIndex] = useState(0);
-  const [multipleInputs, setMultipleInputs] = useState(false)
   const promptArray = [
     'HOW MUCH MONEY WE TALKIN?',
     'HOW MANY EXPOS?',
     'ENTER HOURS WORKED FOR EACH EXPO',
+    'DOES THIS LOOK RIGHT?'
   ];
+  const [promptIndex, setPromptIndex] = useState(0);
+  const [showForm, setShowForm] = useState('true');
+  const [multipleInputs, setMultipleInputs] = useState(false);
   const [inputSlots, setInputSlots] = useState([]);
   const [formInput, setFormInput] = useState('');
   const [multiFormInput, setMultiFormInput] = useState({});
@@ -17,8 +19,31 @@ function App() {
     expo_hours: []
   });
 
+  function returnSum(array) {
+    let sum = 0;
+    for (let i = 0; i < array.length; i++) {
+      sum += array[i]
+    }
+    return sum
+  }
+
+  function splitTips(total_cash, hours_array) {
+    let total_hours = returnSum(hours_array);
+    let percent_array = [];
+    for (let i = 0; i < hours_array.length; i++) {
+      let percent = hours_array[i] / total_hours;
+      percent_array.push(Number(percent.toFixed(2)));
+    };
+    let tips_array = [];
+    for (let i = 0; i < percent_array.length; i++) {
+      let tip = total_cash * percent_array[i];
+      console.log(tip);
+      tips_array.push(tip);
+    };
+    return tips_array;
+  };
+
   const handleData = () => {
-    console.log(dataObj)
     if (promptIndex === 0) {
       setDataObj({ total_cash: formInput });
     };
@@ -28,11 +53,12 @@ function App() {
       handleMultipleInputs(formInput);
     };
     if (promptIndex === 2) {
-      setDataObj({...dataObj, expo_hours: multiFormInput});
+      setDataObj({ ...dataObj, expo_hours: multiFormInput });
       setMultipleInputs(false);
+      setShowForm(false);
     }
     if (promptIndex === 3) {
-      console.log(dataObj);
+      // splitTips(dataObj.total_cash, )
     }
   }
 
@@ -52,10 +78,10 @@ function App() {
 
   const handleMultiInputChange = (e) => {
     setMultiFormInput({
-        ...multiFormInput,
-        [e.target.name]: e.target.value
+      ...multiFormInput,
+      [e.target.name]: e.target.value
     });
-}
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -73,20 +99,35 @@ function App() {
   return (
     <div>
       <p>{promptArray[promptIndex]}</p>
-      <button onClick={handleBack}>BACK</button>
-      <form onSubmit={handleSubmit}>
-        {
-          multipleInputs ? inputSlots.map((expo, index) => {
-            let index_num = index + 1
-            return <input key={index} 
-              placeholder={`expo ${index} hours`} 
-              value={multiFormInput.index_num}
-              name={'expo' + index_num} 
-              onChange={handleMultiInputChange}/>
-          }) : <input onChange={handleInputChange} value={formInput}/>
-        }
-        <button>NEXT</button>
-      </form>
+      {
+        showForm ? (
+          <div>
+            <button onClick={handleBack}>BACK</button>
+            <form onSubmit={handleSubmit}>
+              {
+                multipleInputs ? inputSlots.map((expo, index) => {
+                  let index_num = index + 1
+                  return <input key={index}
+                    placeholder={`expo ${index} hours`}
+                    value={multiFormInput.index_num}
+                    name={'expo' + index_num}
+                    onChange={handleMultiInputChange} />
+                }) : <input onChange={handleInputChange} value={formInput} />
+              }
+              <button>NEXT</button>
+            </form>
+          </div>
+        ) : (
+          <div>
+            <p>{dataObj.total_cash}</p>
+            {
+              Object.keys(dataObj.expo_hours).map((key) => {
+                return <p key={key}>{key}: {dataObj.expo_hours[key]} HOURS</p>
+              })
+            }
+          </div>
+        )
+      }
 
     </div>
   );
