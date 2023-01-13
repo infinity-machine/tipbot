@@ -1,13 +1,11 @@
 import React from 'react'
 
-const Form = (props) => {
-
-  
+const Main = () => {
   return (
     <div>
-
+        
     </div>
   )
 }
 
-export default Form
+export default Main
