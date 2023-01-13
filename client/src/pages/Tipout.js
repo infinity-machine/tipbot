@@ -11,10 +11,11 @@ const Tipout = () => {
     ];
     const [promptIndex, setPromptIndex] = useState(0);
     const [multipleInputs, setMultipleInputs] = useState(false);
+    const [showForm, setShowForm] = useState(true)
     const [amountEmps, setAmountEmps] = useState([]);
     const [formInput, setFormInput] = useState('');
     const [totalCash, setTotalCash] = useState(0);
-    const [empHours, setEmpHours] = useState({});
+    const [empHours, setEmpHours] = useState([]);
 
     const handleMultipleInputs = (inputs) => {
         console.log(inputs)
@@ -40,7 +41,7 @@ const Tipout = () => {
         setPromptIndex(promptIndex + 1);
 
         if (promptIndex === 0) {
-            setTotalCash(formInput)
+            setTotalCash(formInput);
         };
         if (promptIndex === 1) {
             setMultipleInputs(true);
@@ -48,10 +49,12 @@ const Tipout = () => {
         };
         if (promptIndex === 2) {
             setMultipleInputs(false);
-            setEmpHours(formInput);
+            setEmpHours(Object.values(formInput));
+            setShowForm(false)
         }
         if (promptIndex === 3) {
-            splitTips(totalCash, empHours);
+            const tips_array = splitTips(totalCash, empHours);
+            console.log(tips_array);
         }
     }
 
@@ -66,27 +69,45 @@ const Tipout = () => {
         <div>
             <p>{promptArray[promptIndex]}</p>
             <div>
-                <form>
-                    <button onClick={handleBack}>BACK</button>
-                    {
-                        multipleInputs ? (
-                            amountEmps.map((data, index) => {
-                                const i = index + 1;
-                                return (
+                {
+                    showForm ? (
+                        <form onSubmit={handleNext}>
+                            <button onClick={handleBack}>BACK</button>
+                            {
+                                multipleInputs ? (
+                                    amountEmps.map((data, index) => {
+                                        const i = index + 1;
+                                        return (
+                                            <input
+                                                key={index}
+                                                placeholder={`Employee ${i} hours`}
+                                                value={formInput.i}
+                                                name={`emp${i}`}
+                                                onChange={handleMultiInputChange} />
+                                        )
+                                    })
+                                ) : (
                                     <input
-                                        key={index}
-                                        placeholder={`Employee ${i} hours`}
-                                        value={formInput.i}
-                                        name={`Employee ${i}`}
-                                        onChange={handleMultiInputChange} />
+                                        onChange={handleInputChange}
+                                        value={formInput} />
                                 )
-                            })
-                        ) : (
-                            <input onChange={handleInputChange} value={formInput} ></input>
-                        )
-                    }
-                    <button onClick={handleNext}>NEXT</button>
-                </form>
+                            }
+                            <button onClick={handleNext}>NEXT</button>
+                        </form>
+                    ) : (
+                        <div>
+                            <p>Total cash: ${totalCash}</p>
+                            {
+                                empHours.map((hours, index) => {
+                                    const i = index + 1
+                                    return (
+                                        <p key={index}>Employee {i} hours: {hours}</p>
+                                    )
+                                })
+                            }
+                        </div>
+                    )
+                }
             </div>
         </div>
     )
